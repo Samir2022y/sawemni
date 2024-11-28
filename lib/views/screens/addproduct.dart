@@ -444,13 +444,14 @@ class _AddproductState extends State<Addproduct> {
                               width: 300,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // if (formKey.currentState!.validate()) {
+                                 if (formKey.currentState!.validate()) {
 
                                   Description = _controller.text;
                                   add = saveProductInfo.saveProductInfo();
                                   showOverlay(add);
 
-                                  // }
+                                  
+                                  }
                                 },
                                 style: butttonDecoration,
                                 child: const Padding(
