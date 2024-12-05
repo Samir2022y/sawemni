@@ -15,10 +15,11 @@ class Addproduct extends StatefulWidget {
 class _AddproductState extends State<Addproduct> {
   OverlayEntry? entry;
   List<XFile> imageInputImages = [];
+    bool allowEditImageInput = true;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Future<bool>? add;
 
-  bool allowEditImageInput = true;
 
   void showOverlay(Future<bool>? add) {
     entry = OverlayEntry(
@@ -113,7 +114,7 @@ class _AddproductState extends State<Addproduct> {
           style: TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         )),
-        backgroundColor: orangeColor,
+        backgroundColor: primaryColor,
       ),
       body: SingleChildScrollView(
         child: Directionality(
