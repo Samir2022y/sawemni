@@ -28,3 +28,8 @@ InputDecoration myInputDecoration(String hintText, IconData icon) {
     contentPadding: EdgeInsets.all(10.0),
   );
 }
+BoxDecoration decobox = const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(30)),
+      color: Color.fromARGB(255, 222, 221, 218),
+
+);
