@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sawemni/views/screens/search.dart';
+import 'package:sawemni/views/screens/detailedProduct.dart'; // Assuming you'll create this file
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -104,6 +105,7 @@ class _HomePageState extends State<HomePage> {
       'details': 'تفاصيل المكنسة الكهربائية'
     },
   ];
+
   void showCategoryFilterDialog() {
     showModalBottomSheet(
       context: context,
@@ -218,20 +220,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void navigateToSearchPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Search()),
-    );
-  }
-
-  void navigateToMenuPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MenuPage()),
-    );
-  }
-
   void autoScrollToEnd() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -253,14 +241,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'مفضلات',
+          'المعرض',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.search, color: Colors.black),
-          onPressed: navigateToSearchPage,
-        ),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list, color: Colors.black),
@@ -270,17 +254,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          // Icon row
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: Colors.black),
-                  onPressed: navigateToMenuPage,
-                ),
                 IconButton(
                   icon: Icon(Icons.sort, color: Colors.black),
                   onPressed: showSortDialog,
@@ -292,8 +271,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-
-          // Product List
           Expanded(
             child: ListView(
               controller: _scrollController,
@@ -309,8 +286,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ProductDetailsPage(product: product),
+                        builder: (context) => Detailedproduct(),
                       ),
                     );
                   },
@@ -324,25 +300,72 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Remaining classes (SearchPage, MenuPage, ProductItem, ProductDetailsPage)
-// remain unchanged.
+class ProductDetailsPage extends StatelessWidget {
+  final Map<String, dynamic> product;
 
-class SearchPage extends StatelessWidget {
+  const ProductDetailsPage({required this.product});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Search")),
-      body: Center(child: Text("Search functionality here")),
-    );
-  }
-}
-
-class MenuPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Menu")),
-      body: Center(child: Text("Menu details here")),
+      appBar: AppBar(
+        title: Text(product['title']),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              product['imageUrl'],
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16),
+            Text(
+              product['title'],
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'السعر: ${product['price']} دج',
+              style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'تاريخ النشر: ${product['date'].toString().substring(0, 10)}',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            SizedBox(height: 16),
+            Text(
+              product['details'],
+              style: TextStyle(fontSize: 16),
+            ),
+            Spacer(),
+            ElevatedButton(
+              onPressed: () {
+                // Example action: Add to cart
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('تمت الإضافة إلى السلة!')),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_cart),
+                  SizedBox(width: 8),
+                  Text('إضافة إلى السلة'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -425,76 +448,6 @@ class ProductItem extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProductDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> product;
-
-  const ProductDetailsPage({required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(product['title']),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              product['imageUrl'],
-              width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: 16),
-            Text(
-              product['title'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'السعر: ${product['price']} دج',
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'تاريخ النشر: ${product['date'].toString().substring(0, 10)}',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 16),
-            Text(
-              product['details'],
-              style: TextStyle(fontSize: 16),
-            ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                // Example action: Add to cart
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('تمت الإضافة إلى السلة!')),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.shopping_cart),
-                  SizedBox(width: 8),
-                  Text('إضافة إلى السلة'),
-                ],
               ),
             ),
           ],
